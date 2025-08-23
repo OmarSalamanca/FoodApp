@@ -13,8 +13,12 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
+
     val username by viewModel.username
     val password by viewModel.password
+
+    var loginResult by remember { mutableStateOf<Boolean?>(null) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,10 +53,10 @@ fun LoginScreen(viewModel: LoginViewModel) {
         loginResult?.let {
             Text(
                 text = if (it) "Login Successful" else "Login Failed",
-                color = if (it) Color.Green else Color.Red
+                color = if (it) Color.Green else Color.Red)
         }
         }
     }
-}
+
 
 
