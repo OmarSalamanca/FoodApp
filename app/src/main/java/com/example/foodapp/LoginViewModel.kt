@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 
 class LoginViewModel : ViewModel () {
+    private val repository = LoginRepo()
+
     private val _username = mutableStateOf("")
     val username : State<String> = _username
 
@@ -20,6 +22,6 @@ class LoginViewModel : ViewModel () {
     }
 
     fun login(): Boolean {
-        return _username.value == "jdeed" && _password.value == "1234"
+        return repository.login(_username.value, _password.value)
     }
 }
