@@ -19,7 +19,10 @@ import androidx.compose.material3.Text
 
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel) {
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onLoginSuccess: () -> Unit
+) {
 
     val username by viewModel.username
     val password by viewModel.password
@@ -53,7 +56,14 @@ fun LoginScreen(viewModel: LoginViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { loginResult = viewModel.login() },
+        Button(
+            onClick = {    val success = viewModel.login()
+                loginResult = success
+                if (success) {
+                    onLoginSuccess()
+                }
+
+                      },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Black,
                 contentColor = Color.White

@@ -7,7 +7,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -25,9 +24,9 @@ fun FoodScreen(
     }
 
 
-    val meals = viewModel.meals.value
-    val loading = viewModel.loading.value
-    val error = viewModel.error.value
+    val meals by viewModel.meals
+    val loading by viewModel.loading
+    val error by viewModel.error
 
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -50,8 +49,7 @@ fun FoodScreen(
                 ) {
                     items(meals) { meal: FoodItem ->
                         MealItem(
-                            mealName = meal.strMeal,
-                            mealPhoto = meal.strMealThumb
+                           meal
                         )
                     }
                 }
@@ -62,8 +60,7 @@ fun FoodScreen(
 
 @Composable
 fun MealItem(
-    mealName: String,
-    mealPhoto: String
+    meal : FoodItem
 ) {
     Card(
         modifier = Modifier
@@ -73,8 +70,8 @@ fun MealItem(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             AsyncImage(
-                model = mealPhoto,
-                contentDescription = mealName,
+                model = meal.strMealThumb,
+                contentDescription = meal.strMeal,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
@@ -83,7 +80,7 @@ fun MealItem(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = mealName,
+                text = meal.strMeal,
                 style = MaterialTheme.typography.titleMedium
             )
 

@@ -1,8 +1,11 @@
-package com.example.foodapp
+    package com.example.foodapp
 
-import retrofit2.http.GET
+    import retrofit2.http.GET
 
-interface FoodApiService {
-    @GET("filter.php?a=Mexican")
-    suspend fun getFoodMenu(): FoodResponse
-}
+    interface FoodApiService {
+        @GET("filter.php?a=Mexican")
+        suspend fun getFoodMenu(): FoodResponse
+
+        @GET("filter.php?a=Egyptian")
+        suspend fun getEgyptianMenu(): FoodResponse
+    }
