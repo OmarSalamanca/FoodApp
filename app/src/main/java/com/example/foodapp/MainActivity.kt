@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             FoodAppTheme {
                 val navController = rememberNavController()
 
@@ -58,5 +59,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-

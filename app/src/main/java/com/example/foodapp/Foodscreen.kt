@@ -1,5 +1,6 @@
 package com.example.foodapp.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -7,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -18,18 +20,20 @@ fun FoodScreen(
     modifier: Modifier = Modifier,
     viewModel: FoodViewModel = viewModel()
 ) {
-
     LaunchedEffect(Unit) {
         viewModel.fetchMeals()
     }
-
 
     val meals by viewModel.meals
     val loading by viewModel.loading
     val error by viewModel.error
 
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(color = 0xFFAD261E))
 
-    Box(modifier = modifier.fillMaxSize()) {
+    ) {
         when {
             loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -48,9 +52,7 @@ fun FoodScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(meals) { meal: FoodItem ->
-                        MealItem(
-                           meal
-                        )
+                        MealItem(meal)
                     }
                 }
             }
@@ -60,15 +62,19 @@ fun FoodScreen(
 
 @Composable
 fun MealItem(
-    meal : FoodItem
+    meal: FoodItem
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+
+    Column(modifier = Modifier.padding(16.dp)) {
             AsyncImage(
                 model = meal.strMealThumb,
                 contentDescription = meal.strMeal,
@@ -83,8 +89,6 @@ fun MealItem(
                 text = meal.strMeal,
                 style = MaterialTheme.typography.titleMedium
             )
-
-
         }
     }
 }
