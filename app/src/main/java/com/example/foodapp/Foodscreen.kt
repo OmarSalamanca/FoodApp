@@ -1,6 +1,7 @@
 package com.example.foodapp.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,12 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.foodapp.FoodViewModel
 import com.example.foodapp.FoodItem
 
 @Composable
 fun FoodScreen(
+    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: FoodViewModel = viewModel()
 ) {
@@ -31,8 +34,7 @@ fun FoodScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(color = 0xFFAD261E))
-
+            .background(Color(0xFFAD261E))
     ) {
         when {
             loading -> {
@@ -52,7 +54,13 @@ fun FoodScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(meals) { meal: FoodItem ->
-                        MealItem(meal)
+                        MealItem(
+                            meal = meal,
+                            onClick = {
+
+                                navController.navigate("detail/${meal.idMeal}")
+                            }
+                        )
                     }
                 }
             }
@@ -62,19 +70,20 @@ fun FoodScreen(
 
 @Composable
 fun MealItem(
-    meal: FoodItem
+    meal: FoodItem,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-
-    Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
             AsyncImage(
                 model = meal.strMealThumb,
                 contentDescription = meal.strMeal,

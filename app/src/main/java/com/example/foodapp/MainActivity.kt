@@ -8,13 +8,13 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.foodapp.ui.FoodScreen
+import com.example.foodapp.ui.FoodDetailScreen
+import com.example.foodapp.LoginScreen
 import com.example.foodapp.ui.theme.FoodAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,18 +25,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             FoodAppTheme {
                 val navController = rememberNavController()
-
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
                     NavHost(
                         navController = navController,
                         startDestination = "login",
                         modifier = Modifier.padding(innerPadding)
                     ) {
-
                         composable("login") {
                             LoginScreen(
                                 viewModel = loginViewModel,
@@ -47,10 +43,17 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-
                         composable("food") {
                             FoodScreen(
+                                navController = navController,
                                 modifier = Modifier
+                            )
+                        }
+                        composable("detail/{foodId}") { backStackEntry ->
+                            val foodId = backStackEntry.arguments?.getString("foodId") ?: ""
+                            FoodDetailScreen(
+                                foodId = foodId,
+                                onBack = { navController.popBackStack() }
                             )
                         }
                     }

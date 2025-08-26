@@ -1,6 +1,9 @@
 package com.example.foodapp
 
 data class FoodDetailFromApi(
+    val idMeal: String?,
+    val strMeal: String?,
+    val strMealThumb: String?,
     val strInstructions: String?,
     val strIngredient1: String?,
     val strIngredient2: String?,
