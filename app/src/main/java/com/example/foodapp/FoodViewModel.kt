@@ -27,6 +27,7 @@ class FoodViewModel : ViewModel() {
                 val response = repository.getFoodMenu()
                 _meals.value = response.meals
                 _error.value = null
+
             } catch (e: Exception) {
                 _error.value = e.message
             } finally {
