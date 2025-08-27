@@ -2,6 +2,7 @@ package com.example.foodapp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,7 +33,8 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFAD261E))
+            .imePadding()
+            .background(Color(0xFFFFFFFF))
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -42,6 +44,7 @@ fun LoginScreen(
             onValueChange = { viewModel.usernameTyped(it) },
             label = { Text("Username") },
             singleLine = true
+
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -52,6 +55,7 @@ fun LoginScreen(
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             singleLine = true
+
         )
 
         Spacer(modifier = Modifier.height(16.dp))

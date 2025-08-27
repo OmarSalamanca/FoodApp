@@ -10,12 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.foodapp.FoodViewModel
 import com.example.foodapp.FoodItem
+import com.example.foodapp.FoodViewModel
 
 @Composable
 fun FoodScreen(
@@ -30,16 +31,24 @@ fun FoodScreen(
     val meals by viewModel.meals
     val loading by viewModel.loading
     val error by viewModel.error
+    var searchQuery by remember { mutableStateOf("") }
+    var filteredMeals by remember { mutableStateOf(meals) }
+
+
+    LaunchedEffect(meals) {
+        filteredMeals = meals
+    }
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFAD261E))
+            .background(Color(0xFFFFFFFF))
     ) {
         when {
             loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
+
             error != null -> {
                 Text(
                     text = "Error: $error",
@@ -47,20 +56,47 @@ fun FoodScreen(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
-            else -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(meals) { meal: FoodItem ->
-                        MealItem(
-                            meal = meal,
-                            onClick = {
 
-                                navController.navigate("detail/${meal.idMeal}")
-                            }
+            else -> {
+                Column(modifier = Modifier.fillMaxSize()) {
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        TextField(
+                            value = searchQuery,
+                            onValueChange = { searchQuery = it },
+                            label = { Text("Search food") },
+                            modifier = Modifier.weight(1f)
                         )
+
+                        Button(
+                            onClick = {
+                                filteredMeals = if (searchQuery.isBlank()) meals
+                                else meals.filter { it.strMeal.contains(searchQuery, ignoreCase = true) }
+                            },
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        ) {
+                            Text("Search")
+                        }
+                    }
+
+
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(filteredMeals) { meal: FoodItem ->
+                            MealItem(
+                                meal = meal,
+                                onClick = { navController.navigate("detail/${meal.idMeal}") }
+                            )
+                        }
                     }
                 }
             }
@@ -78,9 +114,7 @@ fun MealItem(
             .fillMaxWidth()
             .padding(8.dp)
             .clickable { onClick() },
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -89,7 +123,8 @@ fun MealItem(
                 contentDescription = meal.strMeal,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(200.dp),
+                contentScale = ContentScale.FillWidth
             )
 
             Spacer(modifier = Modifier.height(8.dp))

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.foodapp.FoodDetailViewModel
@@ -22,7 +23,7 @@ fun FoodDetailScreen(
     onBack: () -> Unit,
     viewModel: FoodDetailViewModel = viewModel()
 ) {
-    // Fetch details when screen is opened
+
     LaunchedEffect(foodId) {
         viewModel.fetchFoodDetail(foodId)
     }
@@ -32,7 +33,7 @@ fun FoodDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFF8E1)) // light yellow background
+            .background(Color(0xFFFDFDFD))
     ) {
         when {
             foodDetail == null -> {
@@ -46,20 +47,22 @@ fun FoodDetailScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     item {
-                        // Back button
+
                         Button(
                             onClick = { onBack() },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFAD261E),
-                                contentColor = Color.White
-                            )
+                                containerColor = Color(0xFFFFFFFF),
+                                contentColor = Color.Black
+                            ),
+                            modifier = Modifier.padding(bottom = 8.dp)
                         ) {
-                            Text("Back")
+                            Text("<",
+                                fontSize = 24.sp)
                         }
                     }
 
                     item {
-                        // Meal Image
+
                         AsyncImage(
                             model = foodDetail!!.strMealThumb,
                             contentDescription = foodDetail!!.strMeal,
@@ -70,7 +73,7 @@ fun FoodDetailScreen(
                     }
 
                     item {
-                        // Meal Name
+
                         Text(
                             text = foodDetail!!.strMeal,
                             style = MaterialTheme.typography.headlineSmall,
@@ -78,13 +81,13 @@ fun FoodDetailScreen(
                         )
                     }
 
-                    // Ingredients List (clickable items)
+
                     items(foodDetail!!.ingredients) { ingredient ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    // ✅ You can add custom action here when clicked
+
                                     println("Clicked ingredient: $ingredient")
                                 },
                             colors = CardDefaults.cardColors(
@@ -100,7 +103,7 @@ fun FoodDetailScreen(
                         }
                     }
 
-                    // Instructions
+
                     item {
                         Text(
                             text = "Instructions:",

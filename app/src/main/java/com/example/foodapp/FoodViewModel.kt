@@ -20,6 +20,18 @@ class FoodViewModel : ViewModel() {
     private val _error = mutableStateOf<String?>(null)
     val error: State<String?> = _error
 
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> = _searchQuery
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
+    }
+
+    val filteredMeals: List<FoodItem>
+        get() = if (_searchQuery.value.isBlank()) _meals.value
+        else _meals.value.filter { it.strMeal.contains(_searchQuery.value, ignoreCase = true) }
+
+
     fun fetchMeals() {
         viewModelScope.launch {
             _loading.value = true

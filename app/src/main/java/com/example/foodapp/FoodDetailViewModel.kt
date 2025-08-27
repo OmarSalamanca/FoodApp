@@ -10,25 +10,25 @@ class FoodDetailViewModel(
     private val repository: FoodRepository = FoodRepository()
 ) : ViewModel() {
 
-    // Holds the meal detail
+
     private val _foodDetail = MutableStateFlow<FoodDetail?>(null)
     val foodDetail: StateFlow<FoodDetail?> = _foodDetail
 
-    // Loading state
+
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
 
-    // Error state
+
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    // Function to fetch detail of a meal by its ID
+
     fun fetchFoodDetail(foodId: String) {
         viewModelScope.launch {
             _loading.value = true
             _error.value = null
             try {
-                val detail = repository.getFoodDetail(foodId)   // ✅ calls your repository
+                val detail = repository.getFoodDetail(foodId)
                 _foodDetail.value = detail
             } catch (e: Exception) {
                 _error.value = e.message
