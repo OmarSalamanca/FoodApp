@@ -21,7 +21,6 @@ fun LoginScreen(
 ) {
     val username by viewModel.username
     val password by viewModel.password
-
     var loginResult by remember { mutableStateOf<Boolean?>(null) }
 
     Column(
@@ -29,58 +28,53 @@ fun LoginScreen(
             .fillMaxSize()
             .imePadding()
             .background(Color.White)
-            .padding(16.dp),
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 👇 App name (stylish, at the top)
+
         Text(
-            text = "AklShdeed",
+            text = "AklJdeed",
             style = TextStyle(
                 fontSize = 42.sp,
                 fontWeight = FontWeight.ExtraBold,
-                fontFamily = FontFamily.Cursive, // cool handwritten style
+                fontFamily = FontFamily.Cursive,
                 color = Color(0xFF111111)
             ),
-            modifier = Modifier.padding(top = 80.dp, bottom = 60.dp) // push form lower
+            modifier = Modifier.padding(top = 80.dp, bottom = 60.dp)
         )
 
-        // 👇 Login form
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextField(
+            OutlinedTextField(
                 value = username,
                 onValueChange = { viewModel.usernameTyped(it) },
                 label = { Text("Username") },
                 singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
+            OutlinedTextField(
                 value = password,
                 onValueChange = { viewModel.passwordTyped(it) },
                 label = { Text("Password") },
                 visualTransformation = PasswordVisualTransformation(),
                 singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {
                     val success = viewModel.login()
                     loginResult = success
-                    if (success) {
-                        onLoginSuccess()
-                    }
+                    if (success) onLoginSuccess()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Black,
@@ -88,9 +82,9 @@ fun LoginScreen(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                    .height(50.dp)
             ) {
-                Text("Login")
+                Text("Login", fontSize = 18.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -98,7 +92,8 @@ fun LoginScreen(
             loginResult?.let {
                 Text(
                     text = if (it) "Login Successful" else "Login Failed",
-                    color = if (it) Color.Green else Color.Red
+                    color = if (it) Color(0xFF4CAF50) else Color.Red,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }

@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,7 +36,6 @@ fun FoodScreen(
     var searchQuery by remember { mutableStateOf("") }
     var filteredMeals by remember { mutableStateOf(meals) }
 
-
     LaunchedEffect(meals) {
         filteredMeals = meals
     }
@@ -60,31 +61,52 @@ fun FoodScreen(
             else -> {
                 Column(modifier = Modifier.fillMaxSize()) {
 
-
-                    Row(
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        shape = MaterialTheme.shapes.medium,
+                        elevation = CardDefaults.cardElevation(6.dp)
                     ) {
-                        TextField(
-                            value = searchQuery,
-                            onValueChange = { searchQuery = it },
-                            label = { Text("Search food") },
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        Button(
-                            onClick = {
-                                filteredMeals = if (searchQuery.isBlank()) meals
-                                else meals.filter { it.strMeal.contains(searchQuery, ignoreCase = true) }
-                            },
-                            modifier = Modifier.align(Alignment.CenterVertically)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("Search")
+                            OutlinedTextField(
+                                value = searchQuery,
+                                onValueChange = { searchQuery = it },
+                                placeholder = { Text("Search food") },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = "Search Icon"
+                                    )
+                                },
+                                singleLine = true,
+                                modifier = Modifier.weight(1f),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedContainerColor = Color.Transparent,
+                                    unfocusedContainerColor = Color.Transparent,
+                                    focusedBorderColor = Color.Transparent,
+                                    unfocusedBorderColor = Color.Transparent
+                                )
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Button(
+                                onClick = {
+                                    filteredMeals = if (searchQuery.isBlank()) meals
+                                    else meals.filter { it.strMeal.contains(searchQuery, ignoreCase = true) }
+                                },
+                                modifier = Modifier.height(56.dp)
+                            ) {
+                                Text("Search")
+                            }
                         }
                     }
-
 
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),

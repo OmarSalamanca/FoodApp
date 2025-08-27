@@ -4,7 +4,7 @@
     import retrofit2.http.Query
 
     interface FoodApiService {
-        @GET("filter.php?a=French")
+        @GET("filter.php?a=Mexican")
         suspend fun getFoodMenu(): FoodResponse
 
         @GET("lookup.php")
