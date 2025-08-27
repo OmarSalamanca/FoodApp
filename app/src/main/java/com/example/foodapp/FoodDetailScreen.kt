@@ -33,44 +33,48 @@ fun FoodDetailScreen(
 
     val foodDetail by viewModel.foodDetail.collectAsState()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.height(64.dp), colors = TopAppBarDefaults.topAppBarColors(
-                   containerColor = Color(0xFFF3F1F1)
-                )
-                ,
-                navigationIcon = {
-                    Column  (modifier = Modifier.fillMaxHeight(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                         )
-                    {
-                        IconButton(onClick = { onBack() }) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Back",
-                                modifier = Modifier.size(28.dp)
 
-                            )
-                        }
-                    }
-                },
-                title = {},
-                actions = {}
-            )
-        }
-    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFFFFFFF))
-                .padding(innerPadding)
+                .padding(WindowInsets.statusBars.asPaddingValues())
         ) {
+            Column {
+                TopAppBar(modifier = Modifier.height(72.dp),
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color(0xFFF3F1F1)
+                    ),
+                    navigationIcon = {
+//                Column(
+//                    modifier = Modifier
+//                        .wrapContentSize()
+//                        .background(Color.Blue),
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    verticalArrangement = Arrangement.Center,
+//                )
+//                {
+                        IconButton(
+                            onClick = { onBack() }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                modifier = Modifier.size(28.dp)
+                                    .offset(y = -11.dp)
+
+                            )
+                        }
+//                }
+                    },
+                    title = {},
+                    actions = {}
+                )
             when {
                 foodDetail == null -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    CircularProgressIndicator(modifier = Modifier/*.align(Alignment.Center)*/)
                 }
+
                 else -> {
                     LazyColumn(
                         modifier = Modifier
@@ -79,13 +83,14 @@ fun FoodDetailScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         item {
-                            Card( modifier = Modifier
-                                .fillMaxWidth()
-                                .height(220.dp),
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(220.dp),
                                 shape = MaterialTheme.shapes.medium,
                                 elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
                             )
-                                {
+                            {
                                 AsyncImage(
                                     model = foodDetail!!.strMealThumb,
                                     contentDescription = foodDetail!!.strMeal,
