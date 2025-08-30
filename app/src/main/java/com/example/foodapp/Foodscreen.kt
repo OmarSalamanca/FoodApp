@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,6 +20,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.foodapp.FoodItem
 import com.example.foodapp.FoodViewModel
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
 @Composable
 fun FoodScreen(
@@ -33,6 +35,7 @@ fun FoodScreen(
     val meals by viewModel.meals
     val loading by viewModel.loading
     val error by viewModel.error
+    val keyboardController = LocalSoftwareKeyboardController.current
     var searchQuery by remember { mutableStateOf("") }
     var filteredMeals by remember { mutableStateOf(meals) }
 
@@ -49,7 +52,6 @@ fun FoodScreen(
             loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
-
             error != null -> {
                 Text(
                     text = "Error: $error",
@@ -57,10 +59,8 @@ fun FoodScreen(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
-
             else -> {
                 Column(modifier = Modifier.fillMaxSize()) {
-
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -74,16 +74,19 @@ fun FoodScreen(
                                 .padding(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            IconButton(onClick = {
+                                searchQuery = ""
+                                filteredMeals = meals
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = "Back"
+                                )
+                            }
                             OutlinedTextField(
                                 value = searchQuery,
                                 onValueChange = { searchQuery = it },
                                 placeholder = { Text("Search food") },
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Default.Search,
-                                        contentDescription = "Search Icon"
-                                    )
-                                },
                                 singleLine = true,
                                 modifier = Modifier.weight(1f),
                                 colors = OutlinedTextFieldDefaults.colors(
@@ -93,17 +96,23 @@ fun FoodScreen(
                                     unfocusedBorderColor = Color.Transparent
                                 )
                             )
-
-                            Spacer(modifier = Modifier.width(8.dp))
-
-                            Button(
+                            IconButton(
                                 onClick = {
-                                    filteredMeals = if (searchQuery.isBlank()) meals
-                                    else meals.filter { it.strMeal.contains(searchQuery, ignoreCase = true) }
-                                },
-                                modifier = Modifier.height(56.dp)
+                                    filteredMeals =
+                                        if (searchQuery.isBlank()) meals
+                                        else meals.filter {
+                                            it.strMeal.contains(
+                                                searchQuery,
+                                                ignoreCase = true
+                                            )
+                                        }
+                                    keyboardController?.hide()
+                                }
                             ) {
-                                Text("Search")
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "Search"
+                                )
                             }
                         }
                     }
@@ -148,9 +157,7 @@ fun MealItem(
                     .height(200.dp),
                 contentScale = ContentScale.FillWidth
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = meal.strMeal,
                 style = MaterialTheme.typography.titleMedium

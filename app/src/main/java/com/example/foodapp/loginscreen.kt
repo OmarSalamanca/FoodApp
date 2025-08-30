@@ -13,6 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+
 
 @Composable
 fun LoginScreen(
@@ -21,6 +23,7 @@ fun LoginScreen(
 ) {
     val username by viewModel.username
     val password by viewModel.password
+    val keyboardController = LocalSoftwareKeyboardController.current
     var loginResult by remember { mutableStateOf<Boolean?>(null) }
 
     Column(
@@ -75,6 +78,7 @@ fun LoginScreen(
                     val success = viewModel.login()
                     loginResult = success
                     if (success) onLoginSuccess()
+                    keyboardController?.hide()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Black,
